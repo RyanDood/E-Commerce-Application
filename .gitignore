@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+#project
+/appsettings.json
+
 # dotenv files
 .env
 
@@ -11,7 +14,7 @@
 *.suo
 *.user
 *.userosscache
-*.sln.docstates
+*.sln.docstatesto
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
