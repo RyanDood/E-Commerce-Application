@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace Ecommerce_Application.Dao
 {
-    internal class OrderProcessorRepository : IOrderProcessorRepository
+    public class OrderProcessorRepository : IOrderProcessorRepository
     {
 
         string connectionString = DBConnUtil.getConnectionString();
@@ -200,14 +200,14 @@ namespace Ecommerce_Application.Dao
                 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
                     SqlCommand sqlCommand = new SqlCommand();
-                    sqlCommand.CommandText = "select customer_id,Products.product_id,name,price,total from Products inner join (select customer_id,product_id,sum(quantity) as total from Cart group by customer_id,product_id) C on Products.product_id = C.product_id where customer_id =  @customerID";
+                    sqlCommand.CommandText = "select Products.product_id,name,price,description,total from Products inner join (select customer_id,product_id,sum(quantity) as total from Cart group by customer_id,product_id) C on Products.product_id = C.product_id where customer_id =  @customerID";
                     sqlCommand.Parameters.AddWithValue("@customerID", customer.CustomerID);
                     sqlCommand.Connection = sqlConnection;
                     sqlConnection.Open();
                     SqlDataReader reader = sqlCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        var getUserCart = new {CustomerID = (int)reader["customer_id"],ProductID = (int)reader["product_id"],ProductName = (string)reader["name"],ProductPrice = (int)reader["price"],ProductQuantity = (int)reader["total"]};
+                        var getUserCart = new {ProductID = (int)reader["product_id"],ProductName = (string)reader["name"],ProductPrice = (int)reader["price"],Description = (string)reader["description"], QuantityAdded = (int)reader["total"]};
                         getUserCarts.Add(getUserCart);
                     }
                 }
@@ -447,7 +447,9 @@ namespace Ecommerce_Application.Dao
                     SqlDataReader reader = sqlCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        Orders order = new Orders((int)reader["order_id"], (int)reader["customer_id"], reader["order_date"].ToString(), (int)reader["total_price"], (string)reader["shipping_address"]);
+                        DateTime date = (DateTime)reader["order_date"];
+                        string convertedDate = date.ToString("yyyy/MM/dd");
+                        Orders order = new Orders((int)reader["order_id"], (int)reader["customer_id"], convertedDate, (int)reader["total_price"], (string)reader["shipping_address"]);
                         getOrders.Add(order);
                     }
                 }

@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce_Application.Entities
 {
-    internal class Orders
+    public class Orders
     {
         int orderId;
         int customerId;

@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce_Application.Entities
 {
-    internal class Customers
+    public class Customers
     {
         int customer_id;
         string name;

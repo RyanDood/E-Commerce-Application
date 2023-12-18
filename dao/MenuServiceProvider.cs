@@ -1,10 +1,11 @@
-﻿using E_Commerce_Application.Exception;
+﻿using E_Commerce_Application.exception;
+using E_Commerce_Application.Exception;
 using Ecommerce_Application.Dao;
 using Ecommerce_Application.Entities;
 
 namespace E_Commerce_Application.Dao
 {
-    internal class Menu:IMenu
+    internal class MenuServiceProvider:IMenuServiceProvider
     {
         IOrderProcessorRepository orderProcessorRepository = new OrderProcessorRepository();
 
@@ -20,21 +21,27 @@ namespace E_Commerce_Application.Dao
                 string inputProductDescription = Console.ReadLine();
                 Console.WriteLine("\nEnter Product Quantity:");
                 int inputProductQuantity = int.Parse(Console.ReadLine());
-                Products product = new Products(0, inputProductName, inputProductAmount, inputProductDescription, inputProductQuantity);
-                if (orderProcessorRepository.createProduct(product))
+                if(inputProductAmount > 0 && inputProductQuantity > 0)
                 {
-                    Console.WriteLine($"\nProduct {inputProductName} was added successfully\n");
+                    Products product = new Products(0, inputProductName, inputProductAmount, inputProductDescription, inputProductQuantity);
+                    if (orderProcessorRepository.createProduct(product))
+                    {
+                        Console.WriteLine($"\nProduct {inputProductName} was added successfully\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Unable to Add the Product\n");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine($"Unable to Add the Product\n");
+                    throw new InvalidValueException($"Invalid Value");
                 }
             }
             catch(System.Exception e)
             {
                 Console.WriteLine($"\n{ e.Message}\n");
             }
-            
         }
 
         public void createCustomer()
@@ -97,7 +104,7 @@ namespace E_Commerce_Application.Dao
                 else
                 {
                     Console.WriteLine("Unable to Delete Customer\n");
-                }
+                }     
             }
             catch (System.Exception e)
             {
@@ -132,15 +139,23 @@ namespace E_Commerce_Application.Dao
 
                 Console.WriteLine("\nEnter the Quantity to add in Cart:");
                 int inputProductQuantity = int.Parse(Console.ReadLine());
-                if (orderProcessorRepository.addToCart(searchedCustomer, searchedProduct, inputProductQuantity))
+                if(inputProductQuantity < searchedProduct.StockQuantity && inputProductQuantity > 0)
                 {
-                    Console.WriteLine("\nProduct added to cart successfully\n");
+                    if (orderProcessorRepository.addToCart(searchedCustomer, searchedProduct, inputProductQuantity))
+                    {
+                        Console.WriteLine("\nProduct added to cart successfully\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Unable to Add the Product to Cart\n");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine($"Unable to Add the Product to Cart\n");
+                    throw new InvalidValueException($"Invalid Quantity Value");
                 }
             }
+                
             catch (System.Exception e)
             {
                 Console.WriteLine($"\n{ e.Message}\n");
@@ -251,25 +266,37 @@ namespace E_Commerce_Application.Dao
 
                 Console.WriteLine("\nEnter Product Quantity:");
                 int inputQuantity = int.Parse(Console.ReadLine());
-                Console.WriteLine("\nAdd more Products?:\n 1.Yes \t 2.No");
-                int userChoice = int.Parse(Console.ReadLine());
-                if (userChoice == 1)
+                if(inputQuantity < searchedProduct.StockQuantity && inputQuantity > 0)
                 {
-                    productQuantity.Add(searchedProduct, inputQuantity);
-                    goto restart;
-                }
-                else if (userChoice == 2)
-                {
-                    productQuantity.Add(searchedProduct, inputQuantity);
-                    if (orderProcessorRepository.placeOrder(searchedCustomer, productQuantity, inputCustomerAddress))
+                    Console.WriteLine("\nAdd more Products?:\n 1.Yes \t 2.No");
+                    int userChoice = int.Parse(Console.ReadLine());
+                    if (userChoice == 1)
                     {
-                        Console.WriteLine("\nYour Order was placed successfully\n");
+                        productQuantity.Add(searchedProduct, inputQuantity);
+                        goto restart;
+                    }
+                    else if (userChoice == 2)
+                    {
+                        productQuantity.Add(searchedProduct, inputQuantity);
+                        if (orderProcessorRepository.placeOrder(searchedCustomer, productQuantity, inputCustomerAddress))
+                        {
+                            Console.WriteLine("\nYour Order was placed successfully\n");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Unable to place your order\n");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine($"Unable to place your order\n");
+                        throw new InvalidValueException($"Incorrect Choice");
                     }
                 }
+                else
+                {
+                    throw new InvalidValueException($"Invalid Quantity Value");
+                }
+                
             }
             catch (System.Exception e)
             {

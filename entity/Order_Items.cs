@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce_Application.Entities
 {
-    internal class Order_Items
+    public class Order_Items
     {
         int orderItemId;
         int orderId;
@@ -63,7 +63,7 @@
             }
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return $"Order_Item ID::{OrderItemID}\t OrderID::{OrderID}\t ProductID::{ProductID}\t Quantity::{Quantity}";
         }

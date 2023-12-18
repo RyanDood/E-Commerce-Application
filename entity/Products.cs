@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce_Application.Entities
 {
-    internal class Products
+    public class Products
     {
         int product_id;
         string product_name;

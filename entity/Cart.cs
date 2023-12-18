@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce_Application.Entities
 {
-    internal class Cart
+    public class Cart
     {
         int cartId;
         int customerId;
