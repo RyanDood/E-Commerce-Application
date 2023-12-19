@@ -1,6 +1,6 @@
-﻿namespace E_Commerce_Application.Exception
+﻿namespace E_Commerce_Application.exception
 {
-    internal class CustomerNotFoundException:ApplicationException
+    public class CustomerNotFoundException:ApplicationException
     {
         public CustomerNotFoundException(string msg) : base(msg)
         {

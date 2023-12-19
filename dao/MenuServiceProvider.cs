@@ -1,11 +1,10 @@
 ﻿using E_Commerce_Application.exception;
-using E_Commerce_Application.Exception;
 using Ecommerce_Application.Dao;
 using Ecommerce_Application.Entities;
 
 namespace E_Commerce_Application.Dao
 {
-    internal class MenuServiceProvider:IMenuServiceProvider
+    public class MenuServiceProvider:IMenuServiceProvider
     {
         IOrderProcessorRepository orderProcessorRepository = new OrderProcessorRepository();
 
@@ -80,12 +79,8 @@ namespace E_Commerce_Application.Dao
                 {
                     Console.WriteLine("\nProduct Deleted Successfully\n");
                 }
-                else
-                {
-                    Console.WriteLine("Unable to Delete Product\n");
-                }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine($"\n{e.Message}\n");
             }
@@ -101,10 +96,6 @@ namespace E_Commerce_Application.Dao
                 {
                     Console.WriteLine("\nCustomer Deleted Successfully\n");
                 }
-                else
-                {
-                    Console.WriteLine("Unable to Delete Customer\n");
-                }     
             }
             catch (System.Exception e)
             {
@@ -348,10 +339,6 @@ namespace E_Commerce_Application.Dao
                 if (orderProcessorRepository.cancelOrder(inputOrderID))
                 {
                     Console.WriteLine("\nOrder Cancelled Successfully\n");
-                }
-                else
-                {
-                    Console.WriteLine("Unable to cancel your Order\n");
                 }
             }
             catch (System.Exception e)

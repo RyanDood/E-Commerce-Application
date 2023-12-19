@@ -1,4 +1,4 @@
-﻿using E_Commerce_Application.Exception;
+﻿using E_Commerce_Application.exception;
 using E_Commerce_Application.Util;
 using Ecommerce_Application.Entities;
 using System.Data.SqlClient;
@@ -42,31 +42,25 @@ namespace Ecommerce_Application.Dao
         public bool deleteCustomer(int id)
         {
             bool status = false;
-            try
+
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandText = "delete from Customers where customer_id = @customerID";
+                sqlCommand.Parameters.AddWithValue("@customerID", id);
+                sqlCommand.Connection = sqlConnection;
+                sqlConnection.Open();
+                int deleteCustomerStatus = sqlCommand.ExecuteNonQuery();
+                if (deleteCustomerStatus == 0)
                 {
-                    SqlCommand sqlCommand = new SqlCommand();
-                    sqlCommand.CommandText = "delete from Customers where customer_id = @customerID";
-                    sqlCommand.Parameters.AddWithValue("@customerID", id);
-                    sqlCommand.Connection = sqlConnection;
-                    sqlConnection.Open();
-                    int deleteCustomerStatus = sqlCommand.ExecuteNonQuery();
-                    if(deleteCustomerStatus == 0)
-                    {
-                        throw new CustomerNotFoundException($"\nCustomer ID {id} does not exist::");
-                    }
-                    else if (deleteCustomerStatus > 0)
-                    {
-                        status = true;
-                    }
+                    throw new CustomerNotFoundException($"\nCustomer ID {id} does not exist");
+                }
+                else if (deleteCustomerStatus > 0)
+                {
+                    status = true;
                 }
             }
-            catch (Exception e)
-            {
-                Console.Write(e.Message);
-                status = false;
-            }
+
             return status;
         }
 
@@ -103,30 +97,23 @@ namespace Ecommerce_Application.Dao
         public bool deleteProduct(int id)
         {
             bool status = false;
-            try
+
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandText = "delete from Products where product_id = @productID";
+                sqlCommand.Parameters.AddWithValue("@productID", id);
+                sqlCommand.Connection = sqlConnection;
+                sqlConnection.Open();
+                int deleteProductStatus = sqlCommand.ExecuteNonQuery();
+                if (deleteProductStatus == 0)
                 {
-                    SqlCommand sqlCommand = new SqlCommand();
-                    sqlCommand.CommandText = "delete from Products where product_id = @productID";
-                    sqlCommand.Parameters.AddWithValue("@productID", id);
-                    sqlCommand.Connection = sqlConnection;
-                    sqlConnection.Open();
-                    int deleteProductStatus = sqlCommand.ExecuteNonQuery();
-                    if (deleteProductStatus == 0)
-                    {
-                        throw new ProductNotFoundException($"\nProduct ID {id} does not exist::");
-                    }
-                    else if (deleteProductStatus > 0)
-                    {
-                        status = true;
-                    }
+                    throw new ProductNotFoundException($"\nProduct ID {id} does not exist");
                 }
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.Message);
-                status = false;
+                else if (deleteProductStatus > 0)
+                {
+                    status = true;
+                }
             }
             return status;
         }
@@ -327,30 +314,22 @@ namespace Ecommerce_Application.Dao
         public bool cancelOrder(int orderID)
         {
             bool status = false;
-            try
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandText = "delete from Orders where order_id = @orderID";
+                sqlCommand.Parameters.AddWithValue("@orderID", orderID);
+                sqlCommand.Connection = sqlConnection;
+                sqlConnection.Open();
+                int deleteOrderStatus = sqlCommand.ExecuteNonQuery();
+                if (deleteOrderStatus == 0)
                 {
-                    SqlCommand sqlCommand = new SqlCommand();
-                    sqlCommand.CommandText = "delete from Orders where order_id = @orderID";
-                    sqlCommand.Parameters.AddWithValue("@orderID", orderID);
-                    sqlCommand.Connection = sqlConnection;
-                    sqlConnection.Open();
-                    int deleteOrderStatus = sqlCommand.ExecuteNonQuery();
-                    if (deleteOrderStatus == 0)
-                    {
-                        throw new OrderNotFoundException($"\nOrder ID {orderID} does not exist::");
-                    }
-                    else if (deleteOrderStatus > 0)
-                    {
-                        status = true;
-                    }
+                    throw new OrderNotFoundException($"\nOrder ID {orderID} does not exist");
                 }
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.Message);
-                status = false;
+                else if (deleteOrderStatus > 0)
+                {
+                    status = true;
+                }
             }
             return status;
         }

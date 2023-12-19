@@ -1,6 +1,6 @@
 ﻿namespace E_Commerce_Application.Dao
 {
-    internal interface IMenuServiceProvider
+    public interface IMenuServiceProvider
     {
         public void createProduct();
         public void createCustomer();

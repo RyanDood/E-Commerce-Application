@@ -1,6 +1,6 @@
-﻿namespace E_Commerce_Application.Exception
+﻿namespace E_Commerce_Application.exception
 {
-    internal class OrderNotFoundException:ApplicationException
+    public class OrderNotFoundException:ApplicationException
     {
         public OrderNotFoundException(string msg): base(msg)
         {

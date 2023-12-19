@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace E_Commerce_Application.Exception
+namespace E_Commerce_Application.exception
 {
-    internal class CartNotFoundException:ApplicationException
+    public class CartNotFoundException:ApplicationException
     {
         public CartNotFoundException(string message) : base(message)
         {
